@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_29_115203) do
+ActiveRecord::Schema.define(version: 2021_04_29_122419) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,4 +23,18 @@ ActiveRecord::Schema.define(version: 2021_04_29_115203) do
     t.datetime "updated_at", precision: 6, null: false
   end
 
+  create_table "positions", force: :cascade do |t|
+    t.string "title"
+    t.boolean "active"
+
+    # historical_index column.
+    # This tells the order the employee moved through each position, where 1 is most recent.
+    t.integer "historical_index"
+    t.bigint "employee_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["employee_id"], name: "index_positions_on_employee_id"
+  end
+
+  add_foreign_key "positions", "employees"
 end

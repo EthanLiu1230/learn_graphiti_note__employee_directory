@@ -6,10 +6,16 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-Employee.delete_all # Ensure the DB is cleaned each run
+[Employee, Position].each(&:delete_all)
 
 100.times do
-  Employee.create! first_name: Faker::Name.first_name,
+  employee = Employee.create! first_name: Faker::Name.first_name,
     last_name: Faker::Name.last_name,
     age: rand(20..80)
+
+  (1..2).each do |i|
+    employee.positions.create! title: Faker::Job.title,
+      historical_index: i,
+      active: i == 1
+  end
 end
