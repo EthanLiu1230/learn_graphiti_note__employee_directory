@@ -6,4 +6,21 @@ class EmployeeResource < ApplicationResource
   attribute :updated_at, :datetime, writeable: false
 
   has_many :positions
+
+  attribute :title, :string, only: [:filterable, :sortable]
+
+  sort :title do |scope, direction|
+    scope.joins(:current_position).merge(Position.order(title: direction))
+  end
+
+  filter :title do
+    eq do |scope, value|
+      scope.joins(:current_position).merge(Position.where(title: value))
+    end
+  end
+
+  sort :department_name, :string do |scope, value|
+    scope.joins(current_position: :department).merge(Department.order(name: value))
+  end
+
 end
