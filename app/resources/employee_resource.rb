@@ -23,4 +23,9 @@ class EmployeeResource < ApplicationResource
     scope.joins(current_position: :department).merge(Department.order(name: value))
   end
 
+  has_one :current_position, resource: PositionResource do
+    params do |hash|
+      hash[:filter][:current] = true
+    end
+  end
 end
