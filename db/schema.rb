@@ -10,10 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_29_122419) do
+ActiveRecord::Schema.define(version: 2021_04_30_003832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "departments", force: :cascade do |t|
+    t.string "name"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
 
   create_table "employees", force: :cascade do |t|
     t.string "first_name"
@@ -26,15 +32,15 @@ ActiveRecord::Schema.define(version: 2021_04_29_122419) do
   create_table "positions", force: :cascade do |t|
     t.string "title"
     t.boolean "active"
-
-    # historical_index column.
-    # This tells the order the employee moved through each position, where 1 is most recent.
     t.integer "historical_index"
     t.bigint "employee_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.bigint "department_id", null: false
+    t.index ["department_id"], name: "index_positions_on_department_id"
     t.index ["employee_id"], name: "index_positions_on_employee_id"
   end
 
+  add_foreign_key "positions", "departments"
   add_foreign_key "positions", "employees"
 end

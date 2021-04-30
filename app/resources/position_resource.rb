@@ -4,9 +4,11 @@ class PositionResource < ApplicationResource
 
   attribute :historical_index, :integer, only: [:sortable]
 
-  # By adding `fk filter`, we can:
-  # - enable eager-loading(side-loading):
-  #
-  # ?include=positions
-  filter :employee_id, :integer
+  # filter :employee_id, :integer
+  # has same effects
+  attribute :employee_id, :integer, readable: false
+  attribute :department_id, :integer, readable: false
+
+  belongs_to :employee
+  belongs_to :department
 end
