@@ -5,16 +5,14 @@ class EmployeeResource < ApplicationResource
   attribute :created_at, :datetime, writeable: false
   attribute :updated_at, :datetime, writeable: false
   attribute :title, :string, only: [:filterable, :sortable]
-
   has_many :positions
-
   has_one :current_position, resource: PositionResource do
     params do |hash|
       hash[:filter][:current] = true
     end
   end
-
   many_to_many :teams
+  polymorphic_has_many :notes, as: :notable
 
   sort :title do |scope, direction|
     scope.joins(:current_position).merge(Position.order(title: direction))
